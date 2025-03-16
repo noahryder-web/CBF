@@ -1,3 +1,4 @@
+# Using APIs for this version of CBF 
 import pandas as pd
 import requests
 from sentence_transformers import SentenceTransformer
