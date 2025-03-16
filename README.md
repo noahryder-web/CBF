@@ -30,11 +30,13 @@ pip install pandas requests sentence-transformers scikit-learn
 ```
 
 ## API Key
-You need an API key from OMDb to access IMDb data: 50f4a4bd
+You need an API key from OMDb to access IMDb data: 274b3d14 (This needs to be checked for as it's attached to my LSE email, so I'm unsure how it will work in other environments)
+
+- Another issue I've encountered here is there is only 1000 free uses of the API a day, therefore the code is not running, or encounters errors after a certain amount therefore I have not been able to get to the stage where it gets recommendations yet.
 
 ```python
-api_key = '50f4a4bd'
-data_path = "/path/to/your/dataset/"
+api_key = '274b3d14'
+data_path = "/path/to/your/dataset/" (I have my dataset path in the code)
 ```
 
 ## Implementation Details
@@ -105,7 +107,57 @@ Execute the provided code snippets in a Python environment set up as described. 
 1. Ensure the dataset paths in the script match where your `movies.csv` and `links.csv` files are stored.
 2. Run the code in a Python environment to see the recommendations.
 
+# Cosine Similarity 
+# Cosine Similarity in Content-Based Filtering
 
+Cosine similarity is a metric used to measure how similar the entities are irrespective of their size. In the context of content-based filtering, such as in a movie recommendation system, cosine similarity helps us determine how similar two movies are based on their descriptions or other text-based attributes.
+
+## Mathematical Background
+
+Cosine similarity measures the cosine of the angle between two vectors. This metric is a judgment of orientation and not magnitude, with two vectors with the same orientation having a cosine similarity of 1, and two vectors at 90 degrees having a similarity of 0.
+
+The cosine similarity S between two vectors A and B is calculated using the dot product and magnitude as follows:
+
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/88a8ae51-5542-4f7c-8b16-6dad77766d76" alt="Cosine Similarity Formula" width="60%"/>
+</div>
+
+
+where:
+
+- A and B are vectors.
+- A x B represented the dot product of vectors A and B. 
+- The A and B on the bottom of the equation are magnitudes (or norms) of vectors A and B, respectively.
+
+## Application in Movie Recommendation Systems
+
+In a movie recommendation system, each movie can be represented as a vector of attributes. These attributes could be derived from the movie descriptions, genres, or even the keywords associated with them. For example, each word or term in the movie description can be weighted by its frequency or importance, forming a vector.
+
+### Steps to Calculate Cosine Similarity in this Context:
+
+1. **Vectorize Movie Descriptions**: Convert movie descriptions into vectors. Each dimension of the vector could represent a word from the description, and the value could be the frequency or a TF-IDF score which reflects how important a word is to a document in a collection of documents.
+
+2. **Compute Cosine Similarity**: For each pair of movies, calculate the cosine similarity between their respective vectors. This similarity score will tell us how similar the movies are based on their textual content.
+
+3. **Generate Recommendations**: Use these similarity scores to recommend movies. For a given movie, you can find others that have the highest cosine similarity scores and suggest these as recommendations.
+
+## Example Code Snippet
+
+Here is a Python snippet that demonstrates how to calculate cosine similarity between two vectors using `scikit-learn`:
+
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Example vectors
+vector_a = [[1, 2, 3, 4]]
+vector_b = [[4, 3, 2, 1]]
+
+# Calculate cosine similarity
+similarity = cosine_similarity(vector_a, vector_b)
+print(f"Cosine Similarity: {similarity[0][0]}")
+```
+
+This simple example shows the cosine similarity between two movie vectors, which in a real application would represent more complex attributes derived from movie data.
 
 
 
