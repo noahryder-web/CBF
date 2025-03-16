@@ -1,5 +1,5 @@
-# CBF
-Content Based Filtering for AI Recommendation Model
+
+# Content Based Filtering
 
 Content-based filtering (CBF) is a method of recommendation in which items are recommended based on a comparison between the content of the items and a user profile. The content of each item is represented as a set of descriptors or terms, typically the words that describe the items' attributes, and these are compared with the user profile, which describes the types of items this user likes.
 
@@ -24,34 +24,30 @@ This project implements a content-based filtering system to recommend movies bas
 
 To run this project, you will need Python 3.8 or higher and several libraries which can be installed via pip:
 
-```bash
+```python
 pip install pandas requests sentence-transformers scikit-learn
 
-API Key
-You need an API key from OMDb to access IMDb data:
+```
 
-Register at OMDb API to obtain an API key.
-Setup and Configuration
-Include your OMDb API key in the script by replacing 'your_api_key_here' with the actual key:
+## API Key
+You need an API key from OMDb to access IMDb data: 50f4a4bd
 
-python
-Copy
-api_key = 'your_api_key_here'
-Ensure your dataset path is correctly set:
-
-python
-Copy
+```python
+api_key = '50f4a4bd'
 data_path = "/path/to/your/dataset/"
-Implementation Details
-Data Preparation
+```
+
+## Implementation Details
+### Data Preparation
 Load and merge movie data using pandas, then fetch movie overviews from the OMDb API:
 
-python
-Copy
+```bash
 import pandas as pd
 import requests
+```
 
-# Load datasets
+## Load datasets
+```bash
 movies = pd.read_csv(f"{data_path}movies.csv")
 links = pd.read_csv(f"{data_path}links.csv")
 
@@ -66,29 +62,32 @@ links['imdbId'] = links['imdbId'].apply(lambda x: f"{int(x):07d}")
 links['overview'] = links['imdbId'].apply(get_movie_overview)
 movie_descriptions = movies.merge(links[['movieId', 'overview']], on='movieId')
 movie_descriptions['description'] = movie_descriptions['genres'] + " " + movie_descriptions['overview']
-Generating Embeddings
-Convert descriptions to embeddings:
 
-python
-Copy
+```
+
+## Generating Embeddings
+Convert descriptions to embeddings:
+```bash
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 descriptions = movie_descriptions['description'].tolist()
 embeddings = model.encode(descriptions, normalize_embeddings=True)
-Cosine Similarity Calculation
+```
+
+## Cosine Similarity Calculation
 Calculate the cosine similarity between movie embeddings to determine similarity:
 
-python
-Copy
+```bash
 from sklearn.metrics.pairwise import cosine_similarity
 
 similarity_matrix = cosine_similarity(embeddings)
-Recommending Movies
+```
+
+## Recommending Movies
 Function to recommend movies based on a movie index:
 
-python
-Copy
+```bash
 def recommend_movies(movie_idx, top_n=5):
     similarity_scores = list(enumerate(similarity_matrix[movie_idx]))
     sorted_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
@@ -100,14 +99,11 @@ print(recommend_movies(10, 5))
 Running the Project
 Execute the provided code snippets in a Python environment set up as described. Adjust the movie index in recommend_movies to test different recommendations.
 
-pgsql
-Copy
+```
 
 ### Instructions for Usage
-
-1. Replace `'your_api_key_here'` with your actual OMDb API key.
-2. Ensure the dataset paths in the script match where your `movies.csv` and `links.csv` files are stored.
-3. Run the code in a Python environment to see the recommendations.
+1. Ensure the dataset paths in the script match where your `movies.csv` and `links.csv` files are stored.
+2. Run the code in a Python environment to see the recommendations.
 
 
 
