@@ -3,11 +3,17 @@ import torch
 from torch.utils.data import DataLoader
 from sentence_transformers import SentenceTransformer, InputExample, losses
 
-# Load movie and tags data
+# Load the data
 movies_df = pd.read_csv("../data/movies.csv")
 tags_df = pd.read_csv("../data/tags.csv")
 
-# Data cleaning and preparation
+# Print a sample to check initial data
+print("Initial movies data:")
+print(movies_df.head())
+print("Initial tags data:")
+print(tags_df.head())
+
+# Data cleaning for 'tags_df'
 tags_df.dropna(subset=["tag"], inplace=True)  # Drop NaN values from 'tag' column
 tags_df["tag"] = tags_df["tag"].astype(str)  # Convert 'tag' column to string
 
@@ -53,3 +59,4 @@ try:
     print("Fine-tuning complete!")
 except Exception as e:
     print(f"Error during model training: {e}")
+
